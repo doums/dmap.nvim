@@ -2,6 +2,8 @@
 
 One click goto LSP diagnostics
 
+![dmap.nvim](https://github.com/doums/dmap.nvim/blob/main/public/dmap.webm "dmap.nvim in action")
+
 ### Install
 
 Use your plugin manager
