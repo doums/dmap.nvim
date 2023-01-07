@@ -2,7 +2,7 @@
 
 One click goto LSP diagnostics
 
-![dmap.nvim](https://github.com/doums/dmap.nvim/blob/main/public/dmap.webm "dmap.nvim in action")
+![dmap.nvim](https://github.com/doums/dmap.nvim/blob/main/public/dmap.gif "dmap.nvim in action")
 
 ### Install
 
