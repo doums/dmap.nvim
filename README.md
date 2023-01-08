@@ -1,8 +1,22 @@
 ## dmap.nvim
 
-One click goto LSP diagnostics
+Convenient and not disturbing overview of all LSP diagnostics,
+with one click navigation
 
 ![dmap.nvim](https://github.com/doums/dmap.nvim/blob/main/public/dmap.gif "dmap.nvim in action")
+
+### Why?
+
+This plugin is heavily inspired by my experience using JetBrains
+IDE in which there are marks on the right side of the tab editor
+for each diagnostic in the file. The key point is regarding the
+marks positions the height of the editor view actually corresponds
+to the full length of the buffer.
+That is, this design provides an overview of all diagnostics,
+regardless their location in the buffer.
+A simple click on a mark "teleport" you to the corresponding
+diagnostic, making this feature rather simple but very convenient
+(at least for me, who said it's a shame to use the mouse anyway?).
 
 ### Install
 
