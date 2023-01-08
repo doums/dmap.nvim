@@ -3,7 +3,7 @@
 Convenient and not disturbing overview of all LSP diagnostics,
 with one click navigation
 
-![dmap.nvim](https://github.com/doums/dmap.nvim/blob/main/public/dmap.gif "dmap.nvim in action")
+<img src="https://github.com/doums/dmap.nvim/blob/main/public/dmap.gif" width="700">
 
 ### Why?
 
