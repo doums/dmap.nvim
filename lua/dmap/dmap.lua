@@ -21,7 +21,7 @@ local on_click = require('dmap.on_click').on_click
 local api = vim.api
 
 --- Create a new DMap instance.
--- A DMap instance contains a duo of a reference window and an 
+-- A DMap instance contains a duo of a reference window and an
 -- attached diagnostic map window.
 -- @tparam config config the main config
 -- @int win the reference window ID
@@ -57,13 +57,7 @@ function DMap:draw_diagnostics(diagnostics)
   self.diagnostics = diagnostics
   api.nvim_buf_clear_namespace(self.map.b, self.ns_em_id, 0, -1)
   for row, d in pairs(diagnostics) do
-    local id = utils.set_extmark(
-      self.ns_em_id,
-      self.map.b,
-      row,
-      d.severity,
-      self.config.d_hl
-    )
+    local id = utils.set_extmark(self.ns_em_id, self.map.b, row, d.mark)
     self.diagnostics[row].mark_id = id
   end
 end

@@ -23,19 +23,19 @@ function M.hl_exists(name)
   return status
 end
 
-local function get_hl(config, severity)
+function M.get_mark(config, severity)
   local hl_map = {
-    [vim.diagnostic.severity.HINT] = config.hint,
-    [vim.diagnostic.severity.INFO] = config.info,
-    [vim.diagnostic.severity.WARN] = config.warn,
-    [vim.diagnostic.severity.ERROR] = config.error,
+    [vim.diagnostic.severity.HINT] = { config.d_mark.hint, config.d_hl.hint },
+    [vim.diagnostic.severity.INFO] = { config.d_mark.info, config.d_hl.info },
+    [vim.diagnostic.severity.WARN] = { config.d_mark.warn, config.d_hl.warn },
+    [vim.diagnostic.severity.ERROR] = { config.d_mark.error, config.d_hl.error },
   }
   return hl_map[severity]
 end
 
-function M.set_extmark(ns_id, buffer, row, severity, hl_config)
+function M.set_extmark(ns_id, buffer, row, mark)
   local id = api.nvim_buf_set_extmark(buffer, ns_id, row, 0, {
-    virt_text = { { '╸', get_hl(hl_config, severity) } },
+    virt_text = { mark },
     virt_text_pos = 'overlay',
     hl_mode = 'combine',
   })
@@ -60,7 +60,7 @@ function M.open_float_win(config)
   local buffer = api.nvim_create_buf(false, true)
   local window = api.nvim_open_win(buffer, false, config)
   local lines = {}
-  for i = 1, 10 do
+  for _ = 1, 10 do
     table.insert(lines, ' ')
   end
   api.nvim_buf_set_lines(buffer, 0, config.height, false, lines)

@@ -75,6 +75,7 @@ function BState:set_diagnostics()
   local d_by_line = {} -- indexed by line number
   for _, d in ipairs(raw_d) do
     if not d_by_line[d.row] or d_by_line[d.row].severity > d.severity then
+      d.mark = utils.get_mark(self.config, d.severity)
       d_by_line[d.row] = d
     end
   end
@@ -83,8 +84,8 @@ function BState:set_diagnostics()
 end
 
 --- Update the diagnostics.
--- This is a convenience function for using `update_diagnostics`
--- and `set_diagnostics` in one call
+-- This is a convenience function for using `set_diagnostics`
+-- and `draw_diagnostics` in one call
 function BState:update_diagnostics()
   self:set_diagnostics()
 

@@ -16,6 +16,14 @@ local _config = {
     warn = 'dmapWarn',
     error = 'dmapError',
   },
+  -- text used for diagnostic marks
+  -- ⚠ the text must be one character long
+  d_mark = {
+    hint = '╸',
+    info = '╸',
+    warn = '╸',
+    error = '╸',
+  },
   -- ignore these diagnostic sources
   sources_ignored = {},
   -- severity option passed to `vim.diagnostic.get()` (`:h diagnostic-severity`)
