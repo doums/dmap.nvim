@@ -20,7 +20,8 @@ diagnostic, making this feature rather simple but very convenient
 
 ### Install
 
-⚠ This plugin use the recently added `WinResized` [event](https://github.com/neovim/neovim/pull/21161).
+⚠ This plugin heavily relies on the recently added `WinResized`
+[event](https://github.com/neovim/neovim/pull/21161).
 Only neovim from v`0.9` is supported.
 For prior versions PR could be considered (if the amount of code
 changes is not crazy).
