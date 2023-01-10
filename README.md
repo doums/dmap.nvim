@@ -3,7 +3,7 @@
 Convenient and not disturbing overview of all LSP diagnostics,
 with one click navigation
 
-<img src="https://github.com/doums/dmap.nvim/blob/main/public/dmap.gif" width="700">
+<img src="https://user-images.githubusercontent.com/6359431/211436106-c6d0e78d-1499-4788-9add-79b7b9208849.gif" width="700">
 
 ### Why?
 
