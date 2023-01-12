@@ -80,7 +80,10 @@ end
 
 --- Redraw dmap window.
 function DMap:redraw()
-  if not api.nvim_win_is_valid(self.map.w) then
+  if
+    not api.nvim_win_is_valid(self.map.w)
+    or not api.nvim_win_is_valid(self.window)
+  then
     self:kill()
     return
   end
