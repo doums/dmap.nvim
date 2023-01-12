@@ -7,6 +7,8 @@ local api = vim.api
 local BState = require('dmap.bstate')
 local hl_exists = require('dmap.utils').hl_exists
 
+local M = {}
+
 local mt = {}
 function mt:__index(win)
   for _, bs in next, self do
@@ -52,7 +54,7 @@ local function init_hls(config)
   )
 end
 
-local function init(config)
+function M.init(config)
   local group_id = api.nvim_create_augroup('dmap', {})
   init_hls(config)
 
@@ -141,4 +143,4 @@ local function init(config)
   })
 end
 
-return init
+return M
