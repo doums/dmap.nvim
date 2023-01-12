@@ -54,6 +54,11 @@ end
 
 --- Show the diagnostic list in the map window.
 function DMap:draw_diagnostics(diagnostics)
+  if not api.nvim_buf_is_valid(self.map.b) then
+    self:kill()
+    return
+  end
+
   self.diagnostics = diagnostics
   api.nvim_buf_clear_namespace(self.map.b, self.ns_em_id, 0, -1)
   for row, d in pairs(diagnostics) do
@@ -75,6 +80,10 @@ end
 
 --- Redraw dmap window.
 function DMap:redraw()
+  if not api.nvim_win_is_valid(self.map.w) then
+    self:kill()
+    return
+  end
   api.nvim_win_set_config(self.map.w, {
     col = api.nvim_win_get_width(self.window) - 2,
     row = 1,

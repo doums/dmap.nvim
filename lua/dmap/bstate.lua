@@ -97,7 +97,7 @@ end
 --- Redraw dmap windows.
 -- @int ?window the ref window ID
 function BState:redraw(window)
-  if window then
+  if window and self.dmaps[window] then
     self.dmaps[window]:redraw()
   else
     for _, dmap in next, self.dmaps do
