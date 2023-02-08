@@ -76,8 +76,10 @@ function M.init(config)
     group = group_id,
     callback = function(args)
       local bufnr = args.buf
-
-      if state[bufnr] then
+      local filetype = api.nvim_buf_get_option(bufnr, 'filetype')
+      if
+        state[bufnr] or vim.tbl_contains(config.ignore_filetypes, filetype)
+      then
         return
       else
         local bs = BState:new(config, bufnr)

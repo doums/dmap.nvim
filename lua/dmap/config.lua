@@ -25,7 +25,9 @@ local _config = {
     error = '╸',
   },
   -- ignore these diagnostic sources
-  sources_ignored = {},
+  ignore_sources = {},
+  -- ignore these filetypes buffer
+  ignore_filetypes = { 'NvimTree' },
   -- severity option passed to `vim.diagnostic.get()` (`:h diagnostic-severity`)
   severity = nil,
   -- override arguments passed to `nvim_open_win` (see `:h nvim_open_win`)

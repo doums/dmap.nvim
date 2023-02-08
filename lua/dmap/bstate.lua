@@ -64,11 +64,9 @@ function BState:set_diagnostics()
   end, lsp_diags)
 
   -- filter by ignored sources
-  if
-    self.config.sources_ignored and not vim.tbl_isempty(config.sources_ignored)
-  then
+  if not vim.tbl_isempty(config.ignore_sources or {}) then
     raw_d = vim.tbl_filter(function(d)
-      return not vim.tbl_contains(config.sources_ignored, d.source)
+      return not vim.tbl_contains(config.ignore_sources, d.source)
     end, raw_d)
   end
 

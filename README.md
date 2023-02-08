@@ -13,7 +13,7 @@ for each diagnostic in the file. The key point is regarding the
 marks positions the height of the editor view actually corresponds
 to the full length of the buffer.
 That is, this design provides an overview of all diagnostics,
-regardless their location in the buffer.
+regardless of their location in the buffer.
 A simple click on a mark "teleport" you to the corresponding
 diagnostic, making this feature rather simple but very convenient
 (at least for me, who said it's a shame to use the mouse anyway?).
@@ -23,8 +23,6 @@ diagnostic, making this feature rather simple but very convenient
 ⚠ This plugin heavily relies on the recently added `WinResized`
 [event](https://github.com/neovim/neovim/pull/21161).
 Only neovim from v`0.9` is supported.
-For prior versions PR could be considered (if the amount of code
-changes is not crazy).
 
 Use your plugin manager
 
@@ -60,7 +58,9 @@ require('dmap').setup({
     error = '╸',
   },
   -- ignore these diagnostic sources
-  sources_ignored = {},
+  ignore_sources = {},
+  -- ignore these filetypes buffer
+  ignore_filetypes = { 'NvimTree' },
   -- severity option passed to `vim.diagnostic.get()` (`:h diagnostic-severity`)
   severity = nil,
   -- override arguments passed to `nvim_open_win` (see `:h nvim_open_win`)

@@ -99,9 +99,11 @@ end
 
 --- Kill this instance.
 function DMap:kill()
-  local win = self.map.w
-  if api.nvim_win_is_valid(win) then
-    api.nvim_win_close(win, true)
+  if self.map then
+    local win = self.map.w
+    if api.nvim_win_is_valid(win) then
+      api.nvim_win_close(win, true)
+    end
   end
   self.map = nil
   self.config = nil
