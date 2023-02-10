@@ -1,6 +1,6 @@
---[[ This Source Code Form is subject to the terms of the Mozilla Public
-License, v. 2.0. If a copy of the MPL was not distributed with this
-file, You can obtain one at https://mozilla.org/MPL/2.0/. ]]
+-- This Source Code Form is subject to the terms of the Mozilla Public
+-- License, v. 2.0. If a copy of the MPL was not distributed with this
+-- file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 ---------
 --- BState class
@@ -45,50 +45,16 @@ function BState:open(window)
   if self.dmaps[window] then
     return
   end
-  self.dmaps[window] = DMap:new(self.config, window)
+  self.dmaps[window] = DMap:new(self.config, window, self.buffer)
   self.dmaps[window]:open()
 end
 
---- Set and prepare the diagnostic list.
-function BState:set_diagnostics()
-  local config = self.config
-  local lsp_diags =
-    vim.diagnostic.get(self.buffer, { severity = config.severity })
-  local raw_d = vim.tbl_map(function(d)
-    d.row = utils.bufrow_to_dmaprow(
-      d.lnum,
-      api.nvim_buf_line_count(self.buffer),
-      config.height
-    )
-    return d
-  end, lsp_diags)
-
-  -- filter by ignored sources
-  if not vim.tbl_isempty(config.ignore_sources or {}) then
-    raw_d = vim.tbl_filter(function(d)
-      return not vim.tbl_contains(config.ignore_sources, d.source)
-    end, raw_d)
-  end
-
-  local d_by_line = {} -- indexed by line number
-  for _, d in ipairs(raw_d) do
-    if not d_by_line[d.row] or d_by_line[d.row].severity > d.severity then
-      d.mark = utils.get_mark(self.config, d.severity)
-      d_by_line[d.row] = d
-    end
-  end
-
-  self.diagnostics = d_by_line
-end
-
---- Update the diagnostics.
--- This is a convenience function for using `set_diagnostics`
--- and `draw_diagnostics` in one call
+--- Update diagnostics.
+-- Update and redraw diagnostic marks for each window rendering
+-- the source buffer
 function BState:update_diagnostics()
-  self:set_diagnostics()
-
   for _, dmap in next, self.dmaps do
-    dmap:draw_diagnostics(vim.deepcopy(self.diagnostics))
+    dmap:flush()
   end
 end
 

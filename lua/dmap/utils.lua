@@ -1,6 +1,6 @@
---[[ This Source Code Form is subject to the terms of the Mozilla Public
-License, v. 2.0. If a copy of the MPL was not distributed with this
-file, You can obtain one at https://mozilla.org/MPL/2.0/. ]]
+-- This Source Code Form is subject to the terms of the Mozilla Public
+-- License, v. 2.0. If a copy of the MPL was not distributed with this
+-- file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 local api = vim.api
 
@@ -42,6 +42,13 @@ function M.set_extmark(ns_id, buffer, row, mark)
   return id
 end
 
+--- Convert a diagnostic line number to DMap window location
+-- Convert a diagnostic line number relative to the buffer lines
+-- to the matching DMap window location
+-- @int row buffer line number of the diagnostic
+-- @int lines buffer lines count
+-- @int dmap_lines lines count of the DMap window
+-- @treturn corresponding line number in the DMap window
 function M.bufrow_to_dmaprow(row, lines, dmap_lines)
   local pos
   if row == 0 or lines == 0 then
@@ -53,14 +60,14 @@ function M.bufrow_to_dmaprow(row, lines, dmap_lines)
   else
     pos = math.floor((row * dmap_lines) / lines)
   end
-  return pos
+  return pos > 0 and pos or 0
 end
 
 function M.open_float_win(config)
   local buffer = api.nvim_create_buf(false, true)
   local window = api.nvim_open_win(buffer, false, config)
   local lines = {}
-  for _ = 1, 10 do
+  for _ = 1, config.height do
     table.insert(lines, ' ')
   end
   api.nvim_buf_set_lines(buffer, 0, config.height, false, lines)

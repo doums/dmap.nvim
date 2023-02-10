@@ -1,6 +1,6 @@
---[[ This Source Code Form is subject to the terms of the Mozilla Public
-License, v. 2.0. If a copy of the MPL was not distributed with this
-file, You can obtain one at https://mozilla.org/MPL/2.0/. ]]
+-- This Source Code Form is subject to the terms of the Mozilla Public
+-- License, v. 2.0. If a copy of the MPL was not distributed with this
+-- file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 ---------
 --- DMap class
@@ -9,7 +9,9 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/. ]]
 --- Instance
 -- @field config main config
 -- @field window ID of the reference window
+-- @field buffer source buffer ID
 -- @field map buffer and window used to render the diagnostic map window `{b=number,w=number}`
+-- @field diagnostics list of diagnostics for the source buffer
 -- @field ns_em_id namespace ID used to draw the extmarks
 -- @table instance
 
@@ -26,10 +28,11 @@ local api = vim.api
 -- @tparam config config the main config
 -- @int win the reference window ID
 -- @treturn DMap the created instance
-function DMap:new(config, win)
+function DMap:new(config, win, buf)
   local instance = {
     config = config,
     window = win,
+    buffer = buf,
     map = nil,
     diagnostics = nil,
     ns_em_id = api.nvim_create_namespace(string.format('dmap_em_%d', win)),
@@ -41,8 +44,10 @@ end
 --- Open the diagnostic map window.
 function DMap:open()
   local win_cfg = vim.deepcopy(self.config.win_config)
+  local win_h = api.nvim_win_get_height(self.window) - 1
   win_cfg.col = api.nvim_win_get_width(self.window) - 2
   win_cfg.win = self.window
+  win_cfg.height = win_h
   local buf, win = unpack(utils.open_float_win(win_cfg))
   api.nvim_win_set_option(win, 'winblend', 100)
   api.nvim_win_set_hl_ns(win, self.config.ns_hl_id)
@@ -52,33 +57,61 @@ function DMap:open()
   self.map = { b = buf, w = win }
 end
 
---- Show the diagnostic list in the map window.
-function DMap:draw_diagnostics(diagnostics)
+--- Set diagnostics, calculating their corresponding line number
+-- in the dmap window.
+function DMap:set_diagnostics()
+  local config = self.config
+  local ref_h = api.nvim_win_get_height(self.window) - 1
+  local buf_lines = api.nvim_buf_line_count(self.buffer)
+  local height = ref_h < buf_lines and ref_h or buf_lines
+  local lsp_diags =
+    vim.diagnostic.get(self.buffer, { severity = config.severity })
+  local raw_d = vim.tbl_map(function(d)
+    d.row = utils.bufrow_to_dmaprow(d.lnum, buf_lines, height)
+    return d
+  end, lsp_diags)
+
+  -- filter by ignored sources
+  if not vim.tbl_isempty(config.ignore_sources or {}) then
+    raw_d = vim.tbl_filter(function(d)
+      return not vim.tbl_contains(config.ignore_sources, d.source)
+    end, raw_d)
+  end
+
+  local d_by_line = {} -- indexed by line number
+  for _, d in ipairs(raw_d) do
+    if not d_by_line[d.row] or d_by_line[d.row].severity > d.severity then
+      d.mark = utils.get_mark(self.config, d.severity)
+      d_by_line[d.row] = d
+    end
+  end
+
+  self.diagnostics = d_by_line
+end
+
+--- Draw diagnostic marks
+function DMap:draw_diagnostics()
   if not self.map or not api.nvim_buf_is_valid(self.map.b) then
     self:kill()
     return
   end
 
-  self.diagnostics = diagnostics
   api.nvim_buf_clear_namespace(self.map.b, self.ns_em_id, 0, -1)
-  for row, d in pairs(diagnostics) do
+  for row, d in pairs(self.diagnostics) do
     local id = utils.set_extmark(self.ns_em_id, self.map.b, row, d.mark)
     self.diagnostics[row].mark_id = id
   end
 end
 
---- Update the diagnostic list.
--- This is a convenience function for using `update_diagnostics`
--- and `set_diagnostics` in one call
-function DMap:update_diagnostics()
+--- Update the diagnostics.
+-- This is a convenience function for using `set_diagnostics`
+-- and `draw_diagnostics` in one call
+function DMap:flush()
   self:set_diagnostics()
-
-  if self.map then
-    self:draw_diagnostics()
-  end
+  self:draw_diagnostics()
 end
 
---- Redraw dmap window.
+--- Redraw dmap window
 function DMap:redraw()
   if
     not self.map
@@ -88,16 +121,27 @@ function DMap:redraw()
     self:kill()
     return
   end
+
+  -- clear diagnostics
+  api.nvim_buf_clear_namespace(self.map.b, self.ns_em_id, 0, -1)
+
+  -- redraw the window
+  local ref_h = api.nvim_win_get_height(self.window) - 1
+  local height = ref_h > 1 and ref_h or 1
   api.nvim_win_set_config(self.map.w, {
     col = api.nvim_win_get_width(self.window) - 2,
-    row = 1,
+    row = 0,
     relative = 'win',
     win = self.window,
+    height = height,
   })
   api.nvim_win_set_hl_ns(self.map.w, self.config.ns_hl_id)
+
+  -- update diagnostics
+  self:flush()
 end
 
---- Kill this instance.
+--- Kill this instance
 function DMap:kill()
   if self.map then
     local win = self.map.w

@@ -39,8 +39,6 @@ The configuration is optional and can be partially overridden.
 
 ```lua
 require('dmap').setup({
-  -- diagnostic windows height
-  height = 10,
   -- highlight groups used for diagnostic marks
   -- by default link to corresponding `DiagnosticSign*` groups
   d_hl = {

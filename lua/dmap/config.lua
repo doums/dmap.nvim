@@ -1,13 +1,11 @@
---[[ This Source Code Form is subject to the terms of the Mozilla Public
-License, v. 2.0. If a copy of the MPL was not distributed with this
-file, You can obtain one at https://mozilla.org/MPL/2.0/. ]]
+-- This Source Code Form is subject to the terms of the Mozilla Public
+-- License, v. 2.0. If a copy of the MPL was not distributed with this
+-- file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 local M = {}
 
 -- Default config
 local _config = {
-  -- diagnostics windows height (terminal column)
-  height = 10,
   -- highlight groups used for diagnostic marks
   -- by default link to corresponding `DiagnosticSign*` groups
   d_hl = {
@@ -39,7 +37,7 @@ local win_config = {
   style = 'minimal',
   border = 'none',
   relative = 'win',
-  row = 1,
+  row = 0,
   col = 0,
   width = 1,
   zindex = 20,
