@@ -61,6 +61,9 @@ require('dmap').setup({
   ignore_filetypes = { 'NvimTree' },
   -- severity option passed to `vim.diagnostic.get()` (`:h diagnostic-severity`)
   severity = nil,
+  -- vertical offset of the diagnostic window (in character cells)
+  -- must be positive
+  v_offset = 0,
   -- override arguments passed to `nvim_open_win` (see `:h nvim_open_win`)
   -- ⚠ can potentially break the plugin, use at your own risk
   nvim_float_api = nil,

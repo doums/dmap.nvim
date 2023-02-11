@@ -45,7 +45,7 @@ end
 function DMap:open()
   local win_cfg = vim.deepcopy(self.config.win_config)
   local win_h = api.nvim_win_get_height(self.window) - 1
-  win_cfg.col = api.nvim_win_get_width(self.window) - 2
+  win_cfg.col = api.nvim_win_get_width(self.window) - 1 - self.config.v_offset
   win_cfg.win = self.window
   win_cfg.height = win_h
   local buf, win = unpack(utils.open_float_win(win_cfg))
@@ -129,7 +129,7 @@ function DMap:redraw()
   local ref_h = api.nvim_win_get_height(self.window) - 1
   local height = ref_h > 1 and ref_h or 1
   api.nvim_win_set_config(self.map.w, {
-    col = api.nvim_win_get_width(self.window) - 2,
+    col = api.nvim_win_get_width(self.window) - 1 - self.config.v_offset,
     row = 0,
     relative = 'win',
     win = self.window,

@@ -28,6 +28,9 @@ local _config = {
   ignore_filetypes = { 'NvimTree' },
   -- severity option passed to `vim.diagnostic.get()` (`:h diagnostic-severity`)
   severity = nil,
+  -- vertical offset (in character cells) of the diagnostic window
+  -- must be positive
+  v_offset = 0,
   -- override arguments passed to `nvim_open_win` (see `:h nvim_open_win`)
   -- ⚠ can potentially break the plugin, use at your own risk
   nvim_float_api = nil,
