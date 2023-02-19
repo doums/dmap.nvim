@@ -16,9 +16,6 @@
 local BState = {}
 
 local DMap = require('dmap.dmap')
-local utils = require('dmap.utils')
-
-local api = vim.api
 
 --- Create a new BState instance.
 -- A BState represents a buffer to which is attached LSP client(s)
