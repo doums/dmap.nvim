@@ -6,18 +6,6 @@ local api = vim.api
 
 local M = {}
 
-function M.hl(name, fg, bg, style, sp)
-  local hl_map = { fg = fg, bg = bg, sp = sp }
-  if type(style) == 'string' then
-    hl_map[style] = 1
-  elseif type(style) == 'table' then
-    for _, v in ipairs(style) do
-      hl_map[v] = 1
-    end
-  end
-  api.nvim_set_hl(0, name, hl_map)
-end
-
 function M.hl_exists(name)
   local status = pcall(api.nvim_get_hl_by_name, name, {})
   return status
