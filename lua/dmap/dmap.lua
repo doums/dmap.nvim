@@ -107,8 +107,8 @@ end
 -- This is a convenience function for using `set_diagnostics`
 -- and `draw_diagnostics` in one call
 function DMap:flush()
-  self:set_diagnostics()
-  self:draw_diagnostics()
+  pcall(DMap.set_diagnostics, self)
+  pcall(DMap.draw_diagnostics, self)
 end
 
 --- Redraw dmap window
