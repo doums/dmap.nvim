@@ -7,8 +7,7 @@ local api = vim.api
 local M = {}
 
 function M.hl_exists(name)
-  local status = pcall(api.nvim_get_hl_by_name, name, {})
-  return status
+  return not vim.tbl_isempty(vim.api.nvim_get_hl(0, { name = name }))
 end
 
 function M.get_mark(config, severity)
