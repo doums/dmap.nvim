@@ -58,8 +58,8 @@ function M.open_float_win(config)
     table.insert(lines, ' ')
   end
   api.nvim_buf_set_lines(buffer, 0, config.height, false, lines)
-  api.nvim_buf_set_option(buffer, 'modifiable', false)
-  api.nvim_buf_set_option(buffer, 'filetype', 'dmap')
+  api.nvim_set_option_value('modifiable', false, { buf = buffer })
+  api.nvim_set_option_value('filetype', 'dmap', { buf = buffer })
   return { buffer, window }
 end
 
