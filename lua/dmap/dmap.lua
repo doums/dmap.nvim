@@ -49,7 +49,7 @@ function DMap:open()
   win_cfg.win = self.window
   win_cfg.height = win_h
   local buf, win = unpack(utils.open_float_win(win_cfg))
-  api.nvim_win_set_option(win, 'winblend', 100)
+  api.nvim_set_option_value('winblend', 100, { win = win })
   api.nvim_win_set_hl_ns(win, self.config.ns_hl_id)
   vim.keymap.set({ 'n' }, '<LeftRelease>', function()
     on_click(buf, win, self.diagnostics, self.window)
