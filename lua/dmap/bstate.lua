@@ -36,26 +36,16 @@ function BState:new(config, buffer)
   return setmetatable(instance, self)
 end
 
---- Open the diagnostic map window for the given reference window.
+--- Create a diagnostic map for the given reference window.
 -- @int window the ref window ID
-function BState:open(window)
+function BState:new_dmap(window)
   if self.dmaps[window] then
     return
   end
   self.dmaps[window] = DMap:new(self.config, window, self.buffer)
-  self.dmaps[window]:open()
 end
 
---- Update diagnostics.
--- Update and redraw diagnostic marks for each window rendering
--- the source buffer
-function BState:update_diagnostics()
-  for _, dmap in next, self.dmaps do
-    dmap:flush()
-  end
-end
-
---- Redraw dmap windows.
+--- Redraw dmap windows and diagnostic marks.
 -- @int ?window the ref window ID
 function BState:redraw(window)
   if window and self.dmaps[window] then

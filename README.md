@@ -1,28 +1,25 @@
 ## dmap.nvim
 
-Convenient and not disturbing overview of all LSP diagnostics,
-with one click navigation
+Small companion tool providing a subtle overview of LSP
+diagnostics, with one click navigation
 
 <img src="https://user-images.githubusercontent.com/6359431/211436106-c6d0e78d-1499-4788-9add-79b7b9208849.gif" width="700">
 
 ### Why?
 
 This plugin is heavily inspired by my experience using JetBrains
-IDE in which there are marks on the right side of the tab editor
-for each diagnostic in the file. The key point is regarding the
-marks positions the height of the editor view actually corresponds
-to the full length of the buffer.
-That is, this design provides an overview of all diagnostics,
-regardless of their location in the buffer.
+IDE. There are marks on the right side of the editor tab
+to highlight code diagnostic presence, in a very non-intrusive
+but subtle way.
+This design provides a quick overview of the code state.
 A simple click on a mark "teleport" you to the corresponding
-diagnostic, making this feature rather simple but very convenient
-(at least for me, who said it's a shame to use the mouse anyway?).
+diagnostic, making this feature rather simple but very efficient.
 
 ### Install
 
-⚠ This plugin heavily relies on the recently added `WinResized`
-[event](https://github.com/neovim/neovim/pull/21161).
-Only neovim from v`0.9` is supported.
+⚠ Among other this plugin uses the new
+[iterator](https://github.com/neovim/neovim/pull/23029) interface.
+Only neovim from v`0.10` is supported.
 
 Use your plugin manager
 
@@ -47,6 +44,9 @@ require('dmap').setup({
     warn = 'dmapWarn',
     error = 'dmapError',
   },
+  -- highlight group used for the diagnostic map window
+  -- by default link to `NormalFloat`
+  win_hl = 'dmapWin',
   -- text used for diagnostic marks
   -- ⚠ the text must be one character long
   d_mark = {
@@ -55,6 +55,10 @@ require('dmap').setup({
     warn = '╸',
     error = '╸',
   },
+  -- max height of the diagnostic map window
+  -- if not set defaults to the height of the reference window
+  -- must be positive
+  win_max_height = nil,
   -- ignore these diagnostic sources
   ignore_sources = {},
   -- ignore these filetypes buffer

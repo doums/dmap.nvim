@@ -29,38 +29,28 @@ function M.set_extmark(ns_id, buffer, row, mark)
   return id
 end
 
---- Convert a diagnostic line number to DMap window location
--- Convert a diagnostic line number relative to the buffer lines
--- to the matching DMap window location
--- @int row buffer line number of the diagnostic
--- @int lines buffer lines count
--- @int dmap_lines lines count of the DMap window
--- @treturn corresponding line number in the DMap window
-function M.bufrow_to_dmaprow(row, lines, dmap_lines)
-  local pos
-  if row == 0 or lines == 0 then
-    pos = 0
-  elseif lines == 1 then
-    pos = 0
-  elseif row == lines - 1 then
-    pos = dmap_lines - 1
-  else
-    pos = math.floor((row * dmap_lines) / lines)
+function M.calculate_height(d_count, win_h, max_h)
+  local h = d_count
+  if h > win_h then
+    h = win_h
   end
-  return pos > 0 and pos or 0
+  if max_h and h > max_h then
+    h = max_h
+  end
+  return h
 end
 
-function M.open_float_win(config)
-  local buffer = api.nvim_create_buf(false, true)
-  local window = api.nvim_open_win(buffer, false, config)
+function M.fill_map_buffer(buffer, height)
   local lines = {}
-  for _ = 1, config.height do
+  for _ = 1, height do
     table.insert(lines, ' ')
   end
-  api.nvim_buf_set_lines(buffer, 0, config.height, false, lines)
+  api.nvim_set_option_value('modifiable', true, { buf = buffer })
+  -- remove current lines
+  api.nvim_buf_set_lines(buffer, 0, -1, false, {})
+  -- set new lines
+  api.nvim_buf_set_lines(buffer, 0, height, false, lines)
   api.nvim_set_option_value('modifiable', false, { buf = buffer })
-  api.nvim_set_option_value('filetype', 'dmap', { buf = buffer })
-  return { buffer, window }
 end
 
 return M

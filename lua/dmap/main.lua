@@ -47,11 +47,11 @@ local function init_hls(config)
     end
   end
 
-  api.nvim_set_hl(
-    ns_id,
-    'NormalFloat',
-    { fg = 'NONE', bg = 'NONE', ctermbg = 'NONE' }
-  )
+  if hl_exists(config.win_hl) then
+    api.nvim_set_hl(ns_id, 'NormalFloat', { link = config.win_hl })
+  else
+    api.nvim_set_hl(ns_id, 'NormalFloat', { bg = '#212121' })
+  end
 end
 
 function M.init(config)
@@ -83,8 +83,7 @@ function M.init(config)
         return
       else
         local bs = BState:new(config, bufnr)
-        bs:open(api.nvim_get_current_win())
-        bs:update_diagnostics()
+        bs:new_dmap(api.nvim_get_current_win())
         state[bufnr] = bs
       end
 
@@ -116,8 +115,7 @@ function M.init(config)
         buffer = bufnr,
         callback = function(a)
           if state[a.buf] then
-            state[a.buf]:open(api.nvim_get_current_win())
-            state[a.buf]:update_diagnostics()
+            state[a.buf]:new_dmap(api.nvim_get_current_win())
           end
         end,
       })
@@ -137,7 +135,7 @@ function M.init(config)
         buffer = bufnr,
         callback = function(a)
           if state[a.buf] then
-            state[a.buf]:update_diagnostics()
+            state[a.buf]:redraw()
           end
         end,
       })

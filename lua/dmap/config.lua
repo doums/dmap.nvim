@@ -14,6 +14,9 @@ local _config = {
     warn = 'dmapWarn',
     error = 'dmapError',
   },
+  -- highlight group used for the diagnostic map window
+  -- by default link to `NormalFloat`
+  win_hl = 'dmapWin',
   -- text used for diagnostic marks
   -- ⚠ the text must be one character long
   d_mark = {
@@ -22,6 +25,10 @@ local _config = {
     warn = '╸',
     error = '╸',
   },
+  -- max height of the diagnostic map window
+  -- if not set defaults to the height of the reference window
+  -- must be positive
+  win_max_height = nil,
   -- ignore these diagnostic sources
   ignore_sources = {},
   -- ignore these filetypes buffer
