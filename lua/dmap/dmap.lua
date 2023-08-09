@@ -45,7 +45,9 @@ end
 --- Open the diagnostic map window
 function DMap:open()
   local win_cfg = vim.deepcopy(self.config.win_config)
-  win_cfg.col = api.nvim_win_get_width(self.ref.w) - 1 - self.config.v_offset
+  local row, col = utils.win_pos(self.config, self.ref.w)
+  win_cfg.row = row
+  win_cfg.col = col
   win_cfg.win = self.ref.w
   win_cfg.height = 1
   local win = api.nvim_open_win(self.map.b, false, win_cfg)
@@ -149,11 +151,12 @@ function DMap:redraw()
   local max_h = self.config.win_max_height
   local win_h = api.nvim_win_get_height(self.ref.w) - 1
   local height = utils.calculate_height(#self.diagnostics, win_h, max_h)
+  local row, col = utils.win_pos(self.config, self.ref.w)
 
   -- redraw the window
   api.nvim_win_set_config(self.map.w, {
-    col = api.nvim_win_get_width(self.ref.w) - 1 - self.config.v_offset,
-    row = 0,
+    row = row,
+    col = col,
     relative = 'win',
     win = self.ref.w,
     height = height,

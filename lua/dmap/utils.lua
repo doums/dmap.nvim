@@ -40,6 +40,22 @@ function M.calculate_height(d_count, win_h, max_h)
   return h
 end
 
+function M.win_pos(config, ref_win)
+  local col = 1
+  local row = 1
+  local ref_width = api.nvim_win_get_width(ref_win)
+  if config.win_align == 'right' then
+    col = ref_width - 1 - config.win_v_offset
+  else
+    col = config.win_v_offset + 1
+    if col >= ref_width then
+      col = ref_width - 1
+    end
+  end
+  row = config.win_h_offset
+  return row, col
+end
+
 function M.fill_map_buffer(buffer, height)
   local lines = {}
   for _ = 1, height do

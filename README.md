@@ -44,7 +44,7 @@ require('dmap').setup({
     warn = 'dmapWarn',
     error = 'dmapError',
   },
-  -- highlight group used for the diagnostic map window
+  -- highlight group used for the diagnostic window
   -- by default link to `NormalFloat`
   win_hl = 'dmapWin',
   -- text used for diagnostic marks
@@ -55,19 +55,25 @@ require('dmap').setup({
     warn = '╸',
     error = '╸',
   },
-  -- max height of the diagnostic map window
+  -- max height of the diagnostic window
   -- if not set defaults to the height of the reference window
   -- must be positive
   win_max_height = nil,
+  -- alignment of the diagnostic window relative to the reference window
+  -- `left` | `right`
+  win_align = 'right',
+  -- horizontal offset (in character cell) of the diagnostic window
+  -- must be positive
+  win_h_offset = 1,
+  -- vertical offset (in character cell) of the diagnostic window
+  -- must be positive
+  win_v_offset = 1,
   -- ignore these diagnostic sources
   ignore_sources = {},
   -- ignore these filetypes buffer
   ignore_filetypes = { 'NvimTree' },
   -- severity option passed to `vim.diagnostic.get()` (`:h diagnostic-severity`)
   severity = nil,
-  -- vertical offset of the diagnostic window (in character cells)
-  -- must be positive
-  v_offset = 0,
   -- override arguments passed to `nvim_open_win` (see `:h nvim_open_win`)
   -- ⚠ can potentially break the plugin, use at your own risk
   nvim_float_api = nil,
