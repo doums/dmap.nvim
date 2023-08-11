@@ -130,7 +130,7 @@ end
 
 --- Redraw dmap window and diagnostics
 function DMap:redraw()
-  if not api.nvim_win_is_valid(self.ref.w) then
+  if not self.ref or not api.nvim_win_is_valid(self.ref.w) then
     self:kill()
     return
   end
