@@ -174,7 +174,11 @@ function DMap:kill()
   if self.map then
     self:close()
     if api.nvim_buf_is_valid(self.map.b) then
-      api.nvim_buf_delete(self.map.b, { force = true })
+      -- pcall to avoid error when textlock is active
+      local s = pcall(api.nvim_buf_delete, self.map.b, { force = true })
+      if not s then
+        print('dmap: failed to delete buffer ' .. self.map.b)
+      end
     end
   end
   self.config = nil
